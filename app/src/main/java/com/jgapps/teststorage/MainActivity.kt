@@ -55,9 +55,13 @@ class MainActivity : AppCompatActivity() {
 
         listView.onItemClickListener = itemClicked()
 
-        folders = model.getFolderUris()
+        addPermissionGrantedFolders()
+    }
 
-        for (item in folders){
+    private fun addPermissionGrantedFolders() {
+        adapter.clear()
+        folders = model.getFolderUris()
+        for (item in folders) {
             adapter.add(item.path)
         }
     }
@@ -67,6 +71,11 @@ class MainActivity : AppCompatActivity() {
             val selectedItem = adapter.getItem(position)
 
             if (selectedItem != null) {
+
+                if (selectedItem == "..") {
+                    addPermissionGrantedFolders()
+                    return@OnItemClickListener
+                }
 
                 val uri = Uri.parse( selectedItem)
                 val folder = DocumentFile.fromTreeUri(this, uri)!!
@@ -130,6 +139,8 @@ class MainActivity : AppCompatActivity() {
         path.text = folder.name
 
         val files = folder.listFiles()
+
+        adapter.add("..");
 
         for(item in files) {
             adapter.add(item.name)
