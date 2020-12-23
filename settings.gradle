@@ -1,0 +1,3 @@
+include ':libsqlitemanager-release'
+include ':app'
+rootProject.name = "TestStorage"
